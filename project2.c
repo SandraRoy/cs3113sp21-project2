@@ -1,67 +1,59 @@
 #include<stdio.h>
 #include<stdlib.h>
-// free list
-struct free
-{
-        int tag;
-        int size;
-        struct free* next;
-}
-struct free* f_head= NULL;
-struct free* f_prev=NULL;
-struct full{
-        int block_head;
-        int block_end;
-        int block_id;
-        int tag;
+#define SIZE 50000
+struct alloc{
+        int head;
+        int end;
+        
+
 	char process;
         int size;
-}
-struct full* full_head= NULL;
-struct full* full_prev=NULL;
-
-void allocate(int n,char id)
+};
+void firstFit(int n, int fit,char block_id, struct alloc arr[])
 {
-	struct full* a= (struct full*)malloc(sizeof(struct full*));
-	a->size =n;
-	a->process=id;
-	a->next=NULL;
-
-	struct free* empty = f_head;
-
-	while(free!=null)
+	if(n<fit)
 	{
-		if(a->size<= empty->size)
+		for(int i=0;i<SIZE;i++)
 		{
-			break;
-		}
-		empty= empty->next;
-	}
+			if(arr[i].head==0 && arr[i].end==0)
+			{
+				if(i==0)
+				{
+					arr[i].end=n;
+				}
+				else
+				{
+					arr[i].head=arr[i-1].end;
+					arr[i].end=arr[i].head+n;
+				}
+				//strncpy(arr[i].id,block_id);	
+			}
 
-	//start from the node to be filled
-	if( empty!=NULL)
-	{
-		a->block_id= id;
-		empty->size= empty->size-a->size;
-		if(full_head== NULL)
-		{
-			full_head= a;
-		}
-		else
-		{
-			full_prev= full_head;
-			while(
 		}
 	}
-
-
 }
 int main(int argc, char* argv[])
 {	
+	struct alloc num[SIZE];
+	for(int i=0;i<SIZE;i++)
+	{
+	
+		num[i].head=0;
+		num[i].end=0;	
+	}
 	FILE* fp;
 	char fit;
+	char a;
+	char b;
+	unsigned int  c;
 	int bytes;
+	int r_id;
+	int release;
+	int available;
+	int assigned;
+	int find;
 	if(argc>= 2)
+
 	{
 		sscanf(argv[1],"%c",&fit);
 		sscanf(argv[2],"%d",&bytes);
@@ -69,6 +61,7 @@ int main(int argc, char* argv[])
 	}
 	printf("%c\n",fit);
 	printf("%d\n",bytes);
+	
 
 	return 0;
 }
